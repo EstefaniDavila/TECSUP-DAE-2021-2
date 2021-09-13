@@ -1,0 +1,75 @@
+>>> from recetas.models import Autor, Receta, Comentario
+>>> a = Autor(nombre ='Abigail Davila',email='Adavila@gmail.com')
+>>> a.save()
+>>> Autor.object.all
+Traceback (most recent call last):     
+  File "<console>", line 1, in <module>
+AttributeError: type object 'Autor' has no attribute 'object'        
+>>> Autor.objects.all
+<bound method BaseManager.all of <django.db.models.manager.Manager object at 0x0000027C19597550>>
+>>> Autor.objects.all()
+<QuerySet [<Autor: Abigail Davila>]>
+>>> primer = Autor.objects.get(pk=1)
+>>> r1 = Receta.objects.create(
+... titulo = 'Huevo frito',
+... ingredientes = 'huevo, sal, aceite',
+... preparacion = 'calentar la sarten y bla bla bla',
+... autor=primer)
+>>> Receta.objects.all()
+<QuerySet [<Receta: Huevo frito>]>
+>>> c1 = Comentario.objects.create(         
+... receta = r1,
+... texto = 'Un clásico para el desayuno')
+>>> Comentario.objects.all()
+... titulo = 'Agua Hervida',                 sayuno>]>
+... ingredientes = 'agua',
+... preparacion = 'Poner la tetera en el bla 
+bla bla',
+... autor=primer)                            bla bla',
+>>> Receta.objects.all()
+<QuerySet [<Receta: Huevo frito>, <Receta: Agua Hervida>]>                                ua Hervida>]>
+>>> Receta.objects.exclude(ingredientes__startswith='A')
+<QuerySet [<Receta: Huevo frito>, <Receta: Agua Hervida>]>
+>>> Receta.objects.filter(preparacion__contains='tetera')
+<QuerySet [<Receta: Agua Hervida>]>
+>>> Receta.objects.all().order_by('titulo')
+<QuerySet [<Receta: Agua Hervida>, <Receta: Huevo frito>]>
+>>> Receta.objects.all().order_by('titulo').reverse()
+<QuerySet [<Receta: Huevo frito>, <Receta: Agua Hervida>]>
+>>> Comentario.objects.filter(receta=r1)
+<QuerySet [<Comentario: Un clásico para el desayuno>]>
+>>> Comentario.objects.filter(receta=r2) 
+<QuerySet []>
+>>> Receta.objects.filter(titulo='Huevo Frito').update(titulo='Huevito Frito')
+0
+>>> Receta.objects.all()
+<QuerySet [<Receta: Huevo frito>, <Receta: Agua Hervida>]>
+>>> Receta.objects.filter(titulo='Huevo frito').update(titulo='Huevito Frito')
+1
+>>> Receta.objects.all()
+<QuerySet [<Receta: Huevito Frito>, <Receta: 
+Agua Hervida>]>
+>>> c2 = Comentario.objects.create( 
+... receta = r1,
+... texto = 'Para pasar el hambre')
+>>> Comentario.objects.filter(receta=r1).count()
+2
+>>> Comentario.objects.filter(receta=r2).count()
+0
+>>> c3 = Comentario.objects.create( 
+... receta = r2,
+>>> c3 = Comentario.objects.create(
+... receta = r2,
+... texto = 'Receta sin sentido')
+>>> Comentario.objects.filter(receta=r2)
+<QuerySet [<Comentario: Receta sin sentido>]>
+>>> c3.delete()
+(1, {'recetas.Comentario': 1})
+>>> Comentario.objects.filter(receta=r2)
+<QuerySet []>
+>>>
+>>> Receta.objects.get(titulo='Agua Hervida').autor.nombre
+'Abigail Davila'
+>>> Receta.objects.get(titulo='Agua Hervida').autor.email
+'Adavila@gmail.com'
+>>>
